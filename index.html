@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Server-Sent Events</h1>
+    <progress value="20" max="100"></progress>
+    <span style="display: block; " id="messages"></span>
+</body>
+<script>
+     const eventSource = new EventSource("http://localhost:3001/sse");
+
+// Listen for messages
+eventSource.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  console.log(data);
+  
+  
+  const progress=document.querySelector("progress");
+  const messages=document.querySelector("#messages");
+  messages.innerHTML=`progress ${data}%`
+
+  progress.value=data
+  progress.max=1000
+
+};
+
+// Handle errors
+eventSource.onerror = () => {
+  console.error("SSE connection failed");
+};
+</script>
+</html>
